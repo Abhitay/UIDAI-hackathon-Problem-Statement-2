@@ -52,6 +52,9 @@ class _ocrState extends State<ocr> {
       texts = await FlutterMobileVision.read(
         camera: _ocrCamera,
         waitTap: true,
+        autoFocus: true,
+        fps: 2.0,
+        showText: false,
       );
 
       setState(() {
