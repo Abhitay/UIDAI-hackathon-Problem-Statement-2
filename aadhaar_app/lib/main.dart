@@ -1,3 +1,5 @@
+import 'package:aadhaar_app/ocr.dart';
+
 import './home.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: Home(),
+      home: ocr(),
     );
   }
 }
