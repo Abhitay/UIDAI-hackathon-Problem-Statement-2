@@ -10,7 +10,7 @@ class ocr extends StatefulWidget {
 }
 
 class _ocrState extends State<ocr> {
-  int _ocrCamera = FlutterMobileVision.CAMERA_BACK;
+  final int _ocrCamera = FlutterMobileVision.CAMERA_BACK;
   String _text = "TEXT";
 
   @override
@@ -19,7 +19,7 @@ class _ocrState extends State<ocr> {
       backgroundColor: Colors.white70,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Heisenberg 2002'),
+        title: const Text('Heisenberg 2002'),
         centerTitle: true,
       ),
       body: Container(
@@ -29,12 +29,12 @@ class _ocrState extends State<ocr> {
           children: [
             Text(
               _text,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Center(
               child: RaisedButton(
                 onPressed: _read,
-                child: Text(
+                child: const Text(
                   'Scanning',
                   style: TextStyle(fontSize: 16),
                 ),
