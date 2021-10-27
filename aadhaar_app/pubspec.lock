@@ -70,7 +70,7 @@ packages:
     source: hosted
     version: "1.0.4"
   flutter_mobile_vision:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: flutter_mobile_vision
       url: "https://pub.dartlang.org"

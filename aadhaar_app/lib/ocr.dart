@@ -12,6 +12,7 @@ class ocr extends StatefulWidget {
 class _ocrState extends State<ocr> {
   int _ocrCamera = FlutterMobileVision.CAMERA_BACK;
   String _text = "TEXT";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +46,7 @@ class _ocrState extends State<ocr> {
     );
   }
 
-    Future<Null> _read() async {
+    Future _read() async {
     List<OcrText> texts = [];
     try {
       texts = await FlutterMobileVision.read(
