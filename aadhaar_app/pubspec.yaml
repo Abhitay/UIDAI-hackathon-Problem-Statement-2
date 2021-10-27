@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   geocoding: ^2.0.1
   geolocator: ^7.7.1
+  google_fonts: ^2.1.0
   # flutter_mobile_vision: ^0.1.4+1
 
 dev_dependencies:
