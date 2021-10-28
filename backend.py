@@ -39,13 +39,19 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(tempAddress1) + '?format=json'
         response = requests.get(url).json()
         # print(response)
-        return response[0]["lat"]
+        if response:
+            return response[0]["lat"]
+        else:
+            return 0
 
     def getLong(tempAddress1):
         url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(tempAddress1) + '?format=json'
         response = requests.get(url).json()
         # print(response)
-        return response[0]["lon"]
+        if response:
+            return response[0]["lon"]
+        else:
+            return 0
 
     def validate_location(devlat, devlong, addlat, addlong):
         # print(devlat)
