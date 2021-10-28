@@ -1,11 +1,17 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_mobile_vision_2/flutter_mobile_vision_2.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import '../global/globals.dart' as global;
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import '../api_call.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class homepage extends StatefulWidget {
   homepage({Key? key}) : super(key: key);
@@ -20,14 +26,21 @@ class _homepageState extends State<homepage> {
   TextEditingController subDistrict_controller = TextEditingController();
   TextEditingController original_controller = TextEditingController();
   TextEditingController ocr_controller = TextEditingController();
-  var Address = 'Empty';
+  var Address = '';
 
   final int _ocrCamera = FlutterMobileVision.CAMERA_BACK;
   String _text = "TEXT";
   @override
   void initState() {
     get_location();
+    add_data();
     super.initState();
+  }
+
+  void add_data() {
+    FirebaseFirestore.instance
+        .collection('data')
+        .add({'text': 'data added through app'});
   }
 
   void get_location() async {
@@ -87,9 +100,48 @@ class _homepageState extends State<homepage> {
     print(Address);
   }
 
+  late File imageFile;
+
+  // Future<void> uploadFile(String filePath) async {
+  //   File file = File(filePath);
+  //   await firebase_storage.FirebaseStorage.instance
+  //       .ref('uploads/file-to-upload.png')
+  //       .putFile(file);
+  // }
+
+  _imgFromCamera() async {
+    PickedFile? image = await ImagePicker().getImage(source: ImageSource.camera);
+    // File image = (await ImagePicker()
+    //     .pickImage(source: ImageSource.camera, imageQuality: 50)) as File;
+
+    setState(() async {
+      if (image != null) {
+        // imageFile = File(image.path);
+        imageFile = File(image.path);
+        // uploadFile(imageFile);
+        final Reference firebaseStorageRef =
+            FirebaseStorage.instance.ref().child("xyz");
+
+        final UploadTask task = firebaseStorageRef.putFile(imageFile);
+      } else {
+        print('No image selected.');
+        return;
+      }
+      // imageFile = image;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _imgFromCamera();
+          // Navigator.of(context).pop();
+        },
+        child: const Icon(Icons.camera_alt),
+        backgroundColor: Colors.black,
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -222,7 +274,8 @@ class _homepageState extends State<homepage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 15, right: 15),
+                                      padding: const EdgeInsets.only(
+                                          top: 15, right: 15),
                                       child: ElevatedButton(
                                         style: raisedButtonStyle,
                                         onPressed: _read,

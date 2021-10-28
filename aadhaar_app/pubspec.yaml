@@ -39,6 +39,13 @@ dependencies:
   geolocator: ^7.7.1
   google_fonts: ^2.1.0
   flutter_mobile_vision_2: ^0.1.11
+  image_picker: ^0.8.4+3
+
+  firebase: ^9.0.2
+  firebase_core: ^1.8.0
+  firebase_storage: ^10.0.6
+  cloud_firestore: ^2.5.4
+  firebase_analytics: ^8.3.4
   # flutter_mobile_vision: ^0.1.4+1
 
 dev_dependencies:
