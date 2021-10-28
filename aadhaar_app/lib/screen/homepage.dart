@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_mobile_vision/flutter_mobile_vision.dart';
+import 'package:flutter_mobile_vision_2/flutter_mobile_vision_2.dart';
+
 
 class homepage extends StatefulWidget {
-  homepage({Key key}) : super(key: key);
+  homepage({Key ?key}) : super(key: key);
 
   @override
   _homepageState createState() => _homepageState();
@@ -182,9 +183,13 @@ class _homepageState extends State<homepage> {
     List<OcrText> texts = [];
     try {
       texts = await FlutterMobileVision.read(
+        flash: true,
+        autoFocus: true,
         camera: _ocrCamera,
         waitTap: true,
         showText: false,
+        fps: 2.0,
+        scanArea: const Size(1900, 1060)
       );
 
       setState(() {
