@@ -15,6 +15,7 @@ app.add_middleware(
 
 @app.get('/{tempAddress1}/{tempAddress2}/{tempAddress3}/{OriginalAddress}/{OcrAddress}/{x}/{y}')
 async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, OcrAddress, x, y):
+
     def contains(TestVar, elements):
         #print(TestVar, elements)
         for element in elements:
@@ -72,6 +73,11 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     # x = '19.1648029'
     # y = '72.8500454'
     # -----------------------------------------
+    tempAddress1=tempAddress1.lower()
+    tempAddress2 = tempAddress2.lower()
+    tempAddress3 = tempAddress3.lower()
+    OriginalAddress = OriginalAddress.lower()
+    OcrAddress = OcrAddress.lower()
     updatedAddress = tempAddress1 + ',' + tempAddress2 + ',' + tempAddress3
     if tempAddress1:
         addLat = str(getLat(tempAddress1))
