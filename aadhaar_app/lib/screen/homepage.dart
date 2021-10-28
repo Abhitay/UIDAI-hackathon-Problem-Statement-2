@@ -16,6 +16,7 @@ class _homepageState extends State<homepage> {
   TextEditingController subDistrict_controller = TextEditingController();
   TextEditingController original_controller = TextEditingController();
   TextEditingController new_controller = TextEditingController();
+  var Address = 'Empty';
 
   final int _ocrCamera = FlutterMobileVision.CAMERA_BACK;
   String _text = "TEXT";
@@ -160,7 +161,8 @@ class _homepageState extends State<homepage> {
                                       style: TextStyle(fontSize: 16),
                                     ),
                                   ),
-                                )
+                                ),
+                                Text(Address),
                               ],
                             ),
                           ),
@@ -200,6 +202,8 @@ class _homepageState extends State<homepage> {
         new_controller.text = texts[0].value;
         _text = texts[0].value;
       });
+
+
     } on Exception {
       texts.add(OcrText('Failed to recognize text'));
     }

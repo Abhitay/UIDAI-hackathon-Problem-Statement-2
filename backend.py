@@ -28,13 +28,15 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         return False
 
     def getLat(tempAddress1):
-        url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(tempAddress1) + '?format=json'
+        url = 'https://nominatim.openstreetmap.org/search/' + \
+            urllib.parse.quote(tempAddress1) + '?format=json'
         response = requests.get(url).json()
         # print(response)
         return response[0]["lat"]
 
     def getLong(tempAddress1):
-        url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(tempAddress1) + '?format=json'
+        url = 'https://nominatim.openstreetmap.org/search/' + \
+            urllib.parse.quote(tempAddress1) + '?format=json'
         response = requests.get(url).json()
         # print(response)
         return response[0]["lon"]
@@ -64,7 +66,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     # x = '19.1648029'
     # y = '72.8500454'
     # -----------------------------------------
-    updatedAddress = tempAddress1 + ', ' + tempAddress2 + ', ' + tempAddress3
+    updatedAddress = tempAddress1 + ',' + tempAddress2 + ',' + tempAddress3
     if tempAddress1:
         addLat = str(getLat(tempAddress1))
         addLong = str(getLong(tempAddress1))
@@ -79,10 +81,13 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
 
     # newAddress= OriginalAddress
     # print(newAddress)
-    
+
     if validate_bill(OcrAddress, updatedAddress) and validate_location(x, y, addLat, addLong):
-        newAddress = OriginalAddress + ',' + updatedAddress
+        newAddress = OriginalAddress + ', ' + updatedAddress
         if similar(newAddress, OcrAddress):
             print(newAddress)
-    # print(newAddress)
+    print(newAddress)
+    newAddress = newAddress.replace(',', ' ')
+    newAddress = newAddress.replace('  ', ' ')
+    print(newAddress)
     return newAddress
