@@ -2,9 +2,16 @@ import requests
 import urllib.parse
 from difflib import SequenceMatcher
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="http://localhost:3000/",
+    allow_credentials=True,
+    allow_methods=[""],
+    allow_headers=[""],
+)
 
 @app.get('/{tempAddress1}/{tempAddress2}/{tempAddress3}/{OriginalAddress}/{OcrAddress}/{x}/{y}')
 async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, OcrAddress, x, y):
@@ -28,15 +35,13 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         return False
 
     def getLat(tempAddress1):
-        url = 'https://nominatim.openstreetmap.org/search/' + \
-            urllib.parse.quote(tempAddress1) + '?format=json'
+        url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(tempAddress1) + '?format=json'
         response = requests.get(url).json()
         # print(response)
         return response[0]["lat"]
 
     def getLong(tempAddress1):
-        url = 'https://nominatim.openstreetmap.org/search/' + \
-            urllib.parse.quote(tempAddress1) + '?format=json'
+        url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(tempAddress1) + '?format=json'
         response = requests.get(url).json()
         # print(response)
         return response[0]["lon"]
@@ -46,10 +51,11 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         # print(devlong)
         # print(addlat)
         # print(addlong)
-        if float(addlat) * 0.999 <= float(devlat) <= float(addlat) * 1.001 and float(addlong) * 0.999 <= float(
-                devlong) <= float(addlong) * 1.001:
+        if float(addlat) * 0.9 <= float(devlat) <= float(addlat) * 1.1 and float(addlong) * 0.9 <= float(
+                devlong) <= float(addlong) * 1.1:
             return True
         return False
+
 
     def similar(a, b):
         ratio = SequenceMatcher(None, a, b).ratio()
@@ -79,7 +85,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     # print(addLat)
     # print(addLong)
 
-    # newAddress= OriginalAddress
+    newAddress= 'Address Not Verified'
     # print(newAddress)
 
     if validate_bill(OcrAddress, updatedAddress) and validate_location(x, y, addLat, addLong):

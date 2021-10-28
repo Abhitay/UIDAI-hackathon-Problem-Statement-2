@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_mobile_vision_2/flutter_mobile_vision_2.dart';
-
+import 'package:http/http.dart' as http;
+import '../global/globals.dart' as global;
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import '../api_call.dart';
 
 class homepage extends StatefulWidget {
-  homepage({Key ?key}) : super(key: key);
+  homepage({Key? key}) : super(key: key);
 
   @override
   _homepageState createState() => _homepageState();
@@ -15,11 +19,73 @@ class _homepageState extends State<homepage> {
   TextEditingController district_controller = TextEditingController();
   TextEditingController subDistrict_controller = TextEditingController();
   TextEditingController original_controller = TextEditingController();
-  TextEditingController new_controller = TextEditingController();
+  TextEditingController ocr_controller = TextEditingController();
   var Address = 'Empty';
 
   final int _ocrCamera = FlutterMobileVision.CAMERA_BACK;
   String _text = "TEXT";
+  @override
+  void initState() {
+    get_location();
+    super.initState();
+  }
+
+  void get_location() async {
+    final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    global.lat = double.parse("${position.latitude}");
+    global.long = double.parse("${position.longitude}");
+
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+      Placemark placeMark = placemarks[0];
+
+      setState(() {
+        global.state = placeMark.administrativeArea;
+        global.country = placeMark.country;
+        global.city = placeMark.locality;
+        global.subLocality = placeMark.subLocality;
+      });
+      print('${global.lat}');
+      print('${global.long}');
+    } catch (err) {}
+  }
+
+  _validate() async {
+    if (street_controller.text == "") {
+      street_controller.text = " ";
+    }
+    if (subDistrict_controller.text == "") {
+      subDistrict_controller.text = " ";
+    }
+    if (district_controller.text == "") {
+      district_controller.text = " ";
+    }
+    if (original_controller.text == "") {
+      original_controller.text = " ";
+    }
+    if (ocr_controller.text == "") {
+      ocr_controller.text = " ";
+    }
+    if (global.lat == "") {
+      global.lat = " ";
+    }
+    if (global.long == "") {
+      global.long = " ";
+    }
+    var response = await http.get(Uri.parse(
+        'http://10.0.2.2:8000/${street_controller.text}/${subDistrict_controller.text}/${district_controller.text}/${original_controller.text}/${ocr_controller.text}/${global.lat}/${global.long}'));
+    //'http://10.0.2.2:8000/Sahakar Nagar/ / /1301, Swanlake/something Sahakar Nagar/18.4900796/73.8475301'));
+
+    setState(() {
+      Address = response.body;
+    });
+    print(Address);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,12 +204,12 @@ class _homepageState extends State<homepage> {
                                 ),
                                 TextField(
                                   cursorColor: Colors.black,
-                                  controller: new_controller,
+                                  controller: ocr_controller,
                                   maxLines: 2,
-                                  enabled:
-                                      new_controller.text == "" ? false : true,
+                                  // enabled:
+                                  //     ocr_controller.text == "" ? false : true,
                                   decoration: const InputDecoration(
-                                    labelText: 'Updated Address',
+                                    labelText: 'Ocr Address',
                                     labelStyle: TextStyle(color: Colors.grey),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide:
@@ -151,13 +217,24 @@ class _homepageState extends State<homepage> {
                                     ),
                                   ),
                                 ),
+                                // Padding(
+                                //   padding: const EdgeInsets.only(top: 15),
+                                //   child: ElevatedButton(
+                                //     style: raisedButtonStyle,
+                                //     onPressed: _read,
+                                //     child: const Text(
+                                //       'Scan',
+                                //       style: TextStyle(fontSize: 16),
+                                //     ),
+                                //   ),
+                                // ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 15),
                                   child: ElevatedButton(
                                     style: raisedButtonStyle,
-                                    onPressed: _read,
+                                    onPressed: _validate,
                                     child: const Text(
-                                      'Scan',
+                                      'Validate',
                                       style: TextStyle(fontSize: 16),
                                     ),
                                   ),
@@ -185,25 +262,22 @@ class _homepageState extends State<homepage> {
     List<OcrText> texts = [];
     try {
       texts = await FlutterMobileVision.read(
-        flash: true,
-        autoFocus: true,
-        camera: _ocrCamera,
-        waitTap: true,
-        showText: false,
-        fps: 2.0,
-        scanArea: const Size(1900, 1060)
-      );
+          flash: true,
+          autoFocus: true,
+          camera: _ocrCamera,
+          waitTap: true,
+          showText: false,
+          fps: 2.0,
+          scanArea: const Size(1900, 1060));
 
       setState(() {
-        if (new_controller.text == "") {
+        if (ocr_controller.text == "") {
           print("object");
         }
-        original_controller.text = texts[0].value;
-        new_controller.text = texts[0].value;
+        // original_controller.text = texts[0].value;
+        ocr_controller.text = texts[0].value;
         _text = texts[0].value;
       });
-
-
     } on Exception {
       texts.add(OcrText('Failed to recognize text'));
     }

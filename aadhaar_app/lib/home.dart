@@ -1,17 +1,17 @@
-// import 'package:flutter/material.dart';
-// import './global/globals.dart' as global;
-// import 'package:geocoding/geocoding.dart';
-// import 'package:geolocator/geolocator.dart';
+// // import 'package:flutter/material.dart';
+// // import './global/globals.dart' as global;
+// // import 'package:geocoding/geocoding.dart';
+// // import 'package:geolocator/geolocator.dart';
 
-// class Home extends StatefulWidget {
-//   @override
-//   State<Home> createState() => _HomeState();
-// }
+// // class Home extends StatefulWidget {
+// //   @override
+// //   State<Home> createState() => _HomeState();
+// // }
 
-// class _HomeState extends State<Home> {
-//   String userName = 'DazzledSoul';
+// // class _HomeState extends State<Home> {
+// //   String userName = 'DazzledSoul';
 
-//   String name = 'Pratham';
+// //   String name = 'Pratham';
 
 //   void get_location() async {
 //     final position = await Geolocator.getCurrentPosition(
@@ -42,32 +42,32 @@
 //     } catch (err) {}
 //   }
 
-//   @override
-//   void initState() {
-//     get_location();
-//     super.initState();
-//   }
+// //   @override
+// //   void initState() {
+// //     get_location();
+// //     super.initState();
+// //   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         // toolbarHeight: 75,
-//         title: Text(
-//           'Hello',
-//         ),
-//       ),
-//       body: Center(
-//         child: Container(
-//             child: Column(
-//           children: [
-//             Text('country : ${global.country}'),
-//             Text('State : ${global.state}'),
-//             Text('city : ${global.city}'),
-//             Text('sub locality : ${global.subLocality}'),
-//           ],
-//         )),
-//       ),
-//     );
-//   }
-// }
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return Scaffold(
+// //       appBar: AppBar(
+// //         // toolbarHeight: 75,
+// //         title: Text(
+// //           'Hello',
+// //         ),
+// //       ),
+// //       body: Center(
+// //         child: Container(
+// //             child: Column(
+// //           children: [
+// //             Text('country : ${global.country}'),
+// //             Text('State : ${global.state}'),
+// //             Text('city : ${global.city}'),
+// //             Text('sub locality : ${global.subLocality}'),
+// //           ],
+// //         )),
+// //       ),
+// //     );
+// //   }
+// // }
