@@ -217,27 +217,33 @@ class _homepageState extends State<homepage> {
                                     ),
                                   ),
                                 ),
-                                // Padding(
-                                //   padding: const EdgeInsets.only(top: 15),
-                                //   child: ElevatedButton(
-                                //     style: raisedButtonStyle,
-                                //     onPressed: _read,
-                                //     child: const Text(
-                                //       'Scan',
-                                //       style: TextStyle(fontSize: 16),
-                                //     ),
-                                //   ),
-                                // ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15),
-                                  child: ElevatedButton(
-                                    style: raisedButtonStyle,
-                                    onPressed: _validate,
-                                    child: const Text(
-                                      'Validate',
-                                      style: TextStyle(fontSize: 16),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15, right: 15),
+                                      child: ElevatedButton(
+                                        style: raisedButtonStyle,
+                                        onPressed: _read,
+                                        child: const Text(
+                                          'Scan',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 15),
+                                      child: ElevatedButton(
+                                        style: raisedButtonStyle,
+                                        onPressed: _validate,
+                                        child: const Text(
+                                          'Validate',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 Text(Address),
                               ],
