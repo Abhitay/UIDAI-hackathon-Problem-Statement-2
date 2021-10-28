@@ -91,7 +91,7 @@ class _homepageState extends State<homepage> {
       global.long = " ";
     }
     var response = await http.get(Uri.parse(
-        'http://10.0.2.2:8000/${street_controller.text}/${subDistrict_controller.text}/${district_controller.text}/${original_controller.text}/${ocr_controller.text}/${global.lat}/${global.long}'));
+        'https://h68eml.deta.dev/${street_controller.text}/${subDistrict_controller.text}/${district_controller.text}/${original_controller.text}/${ocr_controller.text}/${global.lat}/${global.long}'));
     //'http://10.0.2.2:8000/Sahakar Nagar/ / /1301, Swanlake/something Sahakar Nagar/18.4900796/73.8475301'));
 
     setState(() {
