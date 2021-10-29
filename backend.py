@@ -55,7 +55,6 @@
 #             return True
 #         return False
 
-
 #     def similar(a, b):
 #         ratio = SequenceMatcher(None, a, b).ratio()
 #         # print(ratio)
@@ -99,5 +98,8 @@
 #     print(newAddress)
 #     newAddress = newAddress.replace(',', ' ')
 #     newAddress = newAddress.replace('  ', ' ')
-#     print(newAddress)
-#     return newAddress
+#     if OcrAddress:
+#         print(newAddress)
+#         return newAddress
+#     else:
+#         return 'Address Not Verfied'
