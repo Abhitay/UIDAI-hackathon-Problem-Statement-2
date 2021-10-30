@@ -3,7 +3,7 @@
 Description:-
 We have made the application using Flutter as a mobile User-Interface framework.External(Fast Api,GeoCode) as well as Internal(Aadhaar eKYC API) api's have been used in the backend,they have been connected by using python as a programming language.Finally the backend data was deployed using Deta.
 
-Step's;
+Step's:
 (**The user will have to give permissions like camera and location**)
 
 1.The operator will have to first enter their Aadhaar card number,which will generate an OTP,which will be sent to their linked mobile number.Once the user has been validated they will 
