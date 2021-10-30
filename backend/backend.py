@@ -161,9 +161,9 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
             newAddress = newAddress.replace('  ', ' ')
             newAddress = newAddress.title()
             if OcrAddress:
-                # print(OriginalAddress, '\n', 'Street Name: ', tempAddress1.title(),
-                #     '\n', 'Sub district: ', tempAddress2.title(), '\n', 'District: ', tempAddress3.title(), '\n', 'Complete Address: ', newAddress)
-                return newAddress
-            else:
-                # print('Address Not Verfied')
-                return 'Address Not Verfied'
+                print(OriginalAddress, '\n', 'Street Name: ', tempAddress1.title(),
+                    '\n', 'Sub district: ', tempAddress2.title(), '\n', 'District: ', tempAddress3.title(), '\n', 'Complete Address: ', newAddress)
+                #return newAddress
+            elif OcrAddress ==' ':
+                print('Address Not Verfied')
+                #return 'Address Not Verfied'
