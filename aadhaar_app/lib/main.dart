@@ -1,4 +1,5 @@
 import 'package:aadhaar_app/screen/homepage.dart';
+import 'package:aadhaar_app/screen/landing.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: homepage(),
+      home: landing(),
       builder: EasyLoading.init(),
     );
   }
