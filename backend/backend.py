@@ -9,162 +9,240 @@ geolocator = Nominatim(user_agent="geoapiExercises")
 
 app = FastAPI()
 
-# @app.get('/{tempAddress1}/{tempAddress2}/{tempAddress3}/{OriginalAddress}/{OcrAddress}/{x}/{y}')
-# async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, OcrAddress, x, y):
+@app.get('/{tempAddress1}/{tempAddress2}/{tempAddress3}/{OriginalAddress}/{OcrAddress}/{x}/{y}')
+async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, OcrAddress, x, y):
 
+    def contains(TestVar, elements):
+        #print(TestVar, elements)
+        for element in elements:
+            if element == TestVar:
+                # print('True')
+                return True
+        return False
 
-def contains(TestVar, elements):
-    #print(TestVar, elements)
-    for element in elements:
-        if element == TestVar:
-            #print('True')
+    def validate_bill(strTest, tempAddress1, tempAddress2, tempAddress3):
+        #print(strTest, updatedAddress)
+        billList = list((strTest.replace(',', '')).split(' '))
+
+        # print(billList)
+        # print(updatedAddressList)
+        i = 0
+        #print(i)
+        if tempAddress1:
+            # print('tempAddress1 exists')
+            for elements in billList:
+                if elements == tempAddress1:
+                    i += 1
+                    #print(i)
+                    break
+        else:
+            i += 1
+        # print('tempAddress1', i)
+        if tempAddress2:
+            # print('tempAddress2 exists')
+
+            for elements in billList:
+                if elements == tempAddress2:
+                    i += 1
+                    #print(i)
+                    break
+        else:
+            i += 1
+        # print('tempAddress2', i)
+        if tempAddress3:
+            # print('tempAddress3 exists')
+
+            for elements in billList:
+                if elements == tempAddress3:
+                    i += 1
+                    #print(i)
+                    break
+        else:
+            i += 1
+        # print('tempAddress3', i)
+        if i == 3:
             return True
-    return False
+        return False
 
 
-def validate_bill(strTest, updatedAddress):
-    #print(strTest, updatedAddress)
-    billList = list((strTest.replace(',', '')).split(' '))
-    updatedAddressList = list((updatedAddress.replace(',', ' ')).split(' '))
-    # print(billList)
-    # print(updatedAddressList)
-    for elements in billList:
-        if contains(elements, updatedAddressList):
-            # print(elements)
+    def getLat(tempAddress1):
+        url = 'https://nominatim.openstreetmap.org/search/' + \
+            urllib.parse.quote(tempAddress1) + '?format=json'
+        response = requests.get(url).json()
+        # print(response)
+        if response:
+            return response[0]["lat"]
+        else:
+            return 0
+
+
+    def getLong(tempAddress1):
+        url = 'https://nominatim.openstreetmap.org/search/' + \
+            urllib.parse.quote(tempAddress1) + '?format=json'
+        response = requests.get(url).json()
+        # print(response)
+        if response:
+            return response[0]["lon"]
+        else:
+            return 0
+
+
+    def validate_location(devlat, devlong, addlat, addlong):
+        # print(devlat)
+        # print(devlong)
+        # print(addlat)
+        # print(addlong)
+        if float(addlat) * 0.9 <= float(devlat) <= float(addlat) * 1.1 and float(addlong) * 0.9 <= float(
+                devlong) <= float(addlong) * 1.1:
             return True
-    return False
+        return False
 
 
-def getLat(tempAddress1):
-    url = 'https://nominatim.openstreetmap.org/search/' + \
-        urllib.parse.quote(tempAddress1) + '?format=json'
-    response = requests.get(url).json()
-    # print(response)
-    if response:
-        return response[0]["lat"]
-    else:
-        return 0
+    def similar(a, b):
+        ratio = SequenceMatcher(None, a, b).ratio()
+        # print(ratio)
+        if ratio > 0.6:
+            return True
 
 
-def getLong(tempAddress1):
-    url = 'https://nominatim.openstreetmap.org/search/' + \
-        urllib.parse.quote(tempAddress1) + '?format=json'
-    response = requests.get(url).json()
-    # print(response)
-    if response:
-        return response[0]["lon"]
-    else:
-        return 0
+    def OcrAddressCheck(OcrAddress, district, sub_district):
+        districtNames = pd.read_csv('Districts.csv')
+        subDistrictNames = pd.read_csv('Sub_districts.csv')
+        districtNamesList = list(districtNames['Districts'])
+        subDistrictNamesList = list(subDistrictNames['Sub_districts'])
+        ocrAddressList = list((OcrAddress.replace(',', '')).split(' '))
+
+        i = 0
+        # print('Districts')
+        if district:
+            for elements in districtNamesList:
+                if contains(elements.lower(), ocrAddressList):
+                    # print('districtNamesList')
+                    i += 1
+                    # print(i)
+                    break
+        else:
+            i += 1
+        #print('Districts',i)
+        #print('Sub Districts')
+        if sub_district:
+            for elements in subDistrictNamesList:
+                if contains(elements.lower(), ocrAddressList):
+                    # print('subDistrictNamesList')
+                    # print(elements)
+                    # print(i)
+                    i += 1
+                    break
+        else:
+            i += 1
+        # print('end',i)
+        #print('Sub Districts',i)
+        if i == 2:
+            return True
+        return False
+
+    def districtCheck(tempAddress3):
+        districtNames = pd.read_csv('Districts.csv')
+        districtNamesList = list(districtNames['Districts'])
+        if tempAddress3:
+            for elements in districtNamesList:
+                if elements.lower()== tempAddress3:
+                    return True
+        return False
 
 
-def validate_location(devlat, devlong, addlat, addlong):
-    # print(devlat)
-    # print(devlong)
-    # print(addlat)
-    # print(addlong)
-    if float(addlat) * 0.9 <= float(devlat) <= float(addlat) * 1.1 and float(addlong) * 0.9 <= float(
-            devlong) <= float(addlong) * 1.1:
-        return True
-    return False
+    def subDistrictCheck(tempAddress2):
+        subDistrictNames = pd.read_csv('Sub_districts.csv')
+        subDistrictNamesList = list(subDistrictNames['Sub_districts'])
+        if tempAddress3:
+            for elements in subDistrictNamesList:
+                if elements.lower() == tempAddress2:
+                    return True
+        return False
 
+    # -----Take all the data from flutter------
+    # tempAddress1 = input("Enter the street name: ")
+    # tempAddress2 = input("Enter the sub district: ")
+    # tempAddress3 = input("Enter the district: ")
+    # OriginalAddress = input("Enter original address: ")
+    # OcrAddress = input("Enter OCR address: ")
+    # x = '19.1648029'
+    # y = '72.8500454'
+    # -----------------------------------------
+    tempAddress1 = tempAddress1.lower()
+    tempAddress2 = tempAddress2.lower()
+    tempAddress3 = tempAddress3.lower()
+    OriginalAddress = OriginalAddress.lower()
+    OcrAddress = OcrAddress.lower()
 
-def similar(a, b):
-    ratio = SequenceMatcher(None, a, b).ratio()
-    # print(ratio)
-    if ratio > 0.6:
-        return True
+    updatedAddress = tempAddress1 + ',' + tempAddress2 + ',' + tempAddress3
+    if tempAddress1:
+        addLat = str(getLat(tempAddress1))
+        addLong = str(getLong(tempAddress1))
+    elif tempAddress2:
+        addLat = str(getLat(tempAddress2))
+        addLong = str(getLong(tempAddress2))
+    elif tempAddress3:
+        addLat = str(getLat(tempAddress3))
+        addLong = str(getLong(tempAddress3))
+    # print(addLat)
+    # print(addLong)
 
+    newAddress = ''
+    # print(newAddress)
+    # location = geolocator.reverse(x+","+y)
+    # address = location.raw['address']
+    # district = address.get('state_district', '')
+    # sub_district = address.get('suburb', '')
+    # street = address.get('street', '')
+    # print(district)
+    # print(sub_district)
+    # print(street)
+    OriginalAddressList = list((OriginalAddress.replace(',', '')).split(' '))
+    # print(tempAddress1, '\n', tempAddress2, '\n', tempAddress3, '\n',
+    #       OriginalAddress, '\n', OcrAddress, '\n', updatedAddress, '\n', x, '\n', y, '\n', addLat, '\n', addLong, '\n', validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
+    k = l = m = 0
+    # print(validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(
+    #  x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
+    if validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3):
+        #print('yes its working')
+        for elements in OriginalAddressList:
+            #print(elements)
+            if elements == tempAddress1:
+                k += 1
+            if elements == tempAddress2:
+                l += 1
+            if elements == tempAddress3:
+                m += 1
+        
+        if k == 0 and l == 0 and m == 0:
+            newAddress = OriginalAddress + ', ' + updatedAddress
+        elif k == 0 and l > 0 and m > 0:
+            newAddress = OriginalAddress + ', ' + tempAddress1
+        elif k > 0 and l == 0 and m > 0:
+            newAddress = OriginalAddress + ', ' + tempAddress2
+        elif k > 0 and l > 0 and m == 0:
+            newAddress = OriginalAddress + ', ' + tempAddress3
+        elif k == 0 and l == 0 and m > 0:
+            newAddress = OriginalAddress + ', ' + tempAddress1 + ', ' + tempAddress2
+        elif k == 0 and l > 0 and m == 0:
+            newAddress = OriginalAddress + ', ' + tempAddress1 + ', ' + tempAddress3
+        elif k > 0 and l == 0 and m == 0:
+            newAddress = OriginalAddress + ', ' + tempAddress2 + ', ' + tempAddress3
 
-def OcrAddressCheck(OcrAddress,district,sub_district):
-    districtNames = pd.read_csv('Districts.csv')
-    subDistrictNames = pd.read_csv('Sub_districts.csv')
-    districtNamesList = list(districtNames['Districts'])
-    subDistrictNamesList = list(subDistrictNames['Sub_districts'])
-    ocrAddressList = list((OcrAddress.replace(',', '')).split(' '))
-
-    i = 0
-    # print('Districts')
-    if district:
-        for elements in districtNamesList:
-
-            if contains(elements.lower(), ocrAddressList):
-                # print('districtNamesList')
-                i += 1
-                #print(i)
-                break
-    else:
-        i+=1
-    #print('Sub Districts')
-    if sub_district:
-        for elements in subDistrictNamesList:
-
-            if contains(elements.lower(), ocrAddressList):
-                #print('subDistrictNamesList')
-                # print(elements)
-                #print(i)
-                i += 1
-                break
-    else:
-        i+=1
-    #print('end',i)
-    if i == 2:
-        return True
-    return False
-
-
-# -----Take all the data from flutter------
-# tempAddress1 = input("Enter the street name: ")
-# tempAddress2 = input("Enter the sub district: ")
-# tempAddress3 = input("Enter the district: ")
-# OriginalAddress = input("Enter original address: ")
-# OcrAddress = input("Enter OCR address: ")
-# x = '19.1648029'
-# y = '72.8500454'
-# -----------------------------------------
-tempAddress1 = tempAddress1.lower()
-tempAddress2 = tempAddress2.lower()
-tempAddress3 = tempAddress3.lower()
-OriginalAddress = OriginalAddress.lower()
-OcrAddress = OcrAddress.lower()
-
-updatedAddress = tempAddress1 + ',' + tempAddress2 + ',' + tempAddress3
-if tempAddress1:
-    addLat = str(getLat(tempAddress1))
-    addLong = str(getLong(tempAddress1))
-elif tempAddress2:
-    addLat = str(getLat(tempAddress2))
-    addLong = str(getLong(tempAddress2))
-elif tempAddress3:
-    addLat = str(getLat(tempAddress3))
-    addLong = str(getLong(tempAddress3))
-# print(addLat)
-# print(addLong)
-
-newAddress = 'Address Not Verified'
-# print(newAddress)
-# location = geolocator.reverse(x+","+y)
-# address = location.raw['address']
-# district = address.get('state_district', '')
-# sub_district = address.get('suburb', '')
-# street = address.get('street', '')
-# print(district)
-# print(sub_district)
-# print(street)
-
-# print(tempAddress1, '\n', tempAddress2, '\n', tempAddress3, '\n',
-#       OriginalAddress, '\n', OcrAddress, '\n', updatedAddress, '\n', x, '\n', y, '\n', addLat, '\n', addLong, '\n', validate_bill(OcrAddress, updatedAddress), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress))
-
-if validate_bill(OcrAddress, updatedAddress) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress,tempAddress2, tempAddress3):
-    newAddress = OriginalAddress + ', ' + updatedAddress
-    if similar(newAddress, OcrAddress):
-        newAddress = newAddress.replace(',', ' ')
-        newAddress = newAddress.replace('  ', ' ')
+        if similar(newAddress, OcrAddress):
+            newAddress = newAddress.replace(',', ' ')
+            newAddress = newAddress.title()
+        while newAddress.find('  ') > 0:
+            newAddress = newAddress.replace('  ', ' ')
         newAddress = newAddress.title()
-        if OcrAddress:
-            print(OriginalAddress, '\n', 'Street Name: ', tempAddress1.title(),
-                '\n', 'Sub district: ', tempAddress2.title(), '\n', 'District: ', tempAddress3.title(), '\n', 'Complete Address: ', newAddress)
-            #return newAddress
-        elif OcrAddress ==' ':
-            print('Address Not Verfied')
-            #return 'Address Not Verfied'
-
+    # print('here1', OcrAddress, newAddress)
+    if OcrAddress and newAddress and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
+        # print('here', OcrAddress, newAddress)
+        # print(OriginalAddress, '\n', 'Street Name: ', tempAddress1.title(),
+        #     '\n', 'Sub district: ', tempAddress2.title(), '\n', 'District: ', tempAddress3.title(), '\n', 'Complete Address: ', newAddress)
+        return newAddress
+    else:
+        # print('here2', OcrAddress, newAddress)
+        #print('Address Not Verified')
+        return 'Address Not Verfied'
