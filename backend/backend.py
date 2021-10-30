@@ -75,7 +75,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
             return True
 
 
-    def OcrAddressCheck(OcrAddress):
+    def OcrAddressCheck(OcrAddress,district,sub_district):
         districtNames = pd.read_csv('Districts.csv')
         subDistrictNames = pd.read_csv('Sub_districts.csv')
         districtNamesList = list(districtNames['Districts'])
@@ -84,22 +84,28 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
 
         i = 0
         # print('Districts')
-        for elements in districtNamesList:
+        if district:
+            for elements in districtNamesList:
 
-            if contains(elements.lower(), ocrAddressList):
-                # print('districtNamesList')
-                i += 1
-                #print(i)
-                break
+                if contains(elements.lower(), ocrAddressList):
+                    # print('districtNamesList')
+                    i += 1
+                    #print(i)
+                    break
+        else:
+            i+=1
         #print('Sub Districts')
-        for elements in subDistrictNamesList:
+        if sub_district:
+            for elements in subDistrictNamesList:
 
-            if contains(elements.lower(), ocrAddressList):
-                #print('subDistrictNamesList')
-                # print(elements)
-                #print(i)
-                i += 1
-                break
+                if contains(elements.lower(), ocrAddressList):
+                    #print('subDistrictNamesList')
+                    # print(elements)
+                    #print(i)
+                    i += 1
+                    break
+        else:
+            i+=1
         #print('end',i)
         if i == 2:
             return True
@@ -107,13 +113,13 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
 
 
     # -----Take all the data from flutter------
-    tempAddress1 = input("Enter the street name: ")
-    tempAddress2 = input("Enter the sub district: ")
-    tempAddress3 = input("Enter the district: ")
-    OriginalAddress = input("Enter original address: ")
-    OcrAddress = input("Enter OCR address: ")
-    x = '19.1648029'
-    y = '72.8500454'
+    # tempAddress1 = input("Enter the street name: ")
+    # tempAddress2 = input("Enter the sub district: ")
+    # tempAddress3 = input("Enter the district: ")
+    # OriginalAddress = input("Enter original address: ")
+    # OcrAddress = input("Enter OCR address: ")
+    # x = '19.1648029'
+    # y = '72.8500454'
     # -----------------------------------------
     tempAddress1 = tempAddress1.lower()
     tempAddress2 = tempAddress2.lower()
@@ -148,7 +154,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     # print(tempAddress1, '\n', tempAddress2, '\n', tempAddress3, '\n',
     #       OriginalAddress, '\n', OcrAddress, '\n', updatedAddress, '\n', x, '\n', y, '\n', addLat, '\n', addLong, '\n', validate_bill(OcrAddress, updatedAddress), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress))
 
-    if validate_bill(OcrAddress, updatedAddress) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress):
+    if validate_bill(OcrAddress, updatedAddress) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress,tempAddress2, tempAddress3):
         newAddress = OriginalAddress + ', ' + updatedAddress
         if similar(newAddress, OcrAddress):
             newAddress = newAddress.replace(',', ' ')
