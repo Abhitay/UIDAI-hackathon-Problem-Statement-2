@@ -209,7 +209,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         if OcrAddress and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
             return OcrAddress
         else:
-            return 'Address not verfied'
+            return 'Address Not Verified'
             #print(OcrAddress)
         #print('yes its working')
         # for elements in OriginalAddressList:
