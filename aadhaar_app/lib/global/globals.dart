@@ -6,3 +6,5 @@ var country;
 var subLocality;
 var lat;
 var long;
+
+var uid;

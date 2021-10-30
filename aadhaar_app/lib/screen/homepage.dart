@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,7 +16,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class homepage extends StatefulWidget {
-  homepage({Key? key}) : super(key: key);
+  String add;
+  homepage(this.add);
 
   @override
   _homepageState createState() => _homepageState();
@@ -34,9 +36,16 @@ class _homepageState extends State<homepage> {
 
   final int _ocrCamera = FlutterMobileVision.CAMERA_BACK;
   String _text = "TEXT";
+  // Future<Album>? _futureAlbum;
+  // Future<eKYC>? _futureeKYC;
   @override
   void initState() {
     get_location();
+    // print(createAlbum());
+    // createAlbum();
+    setState(() {
+      original_controller.text = widget.add;
+    });
     super.initState();
   }
 
@@ -89,7 +98,7 @@ class _homepageState extends State<homepage> {
       global.long = " ";
     }
     var response = await http.get(Uri.parse(
-        'https://cbada0.deta.dev/${street_controller.text}/${subDistrict_controller.text}/${district_controller.text}/${original_controller.text}/${ocr_controller.text}/${global.lat}/${global.long}'));
+        'https://doh8xt.deta.dev/${street_controller.text}/${subDistrict_controller.text}/${district_controller.text}/${original_controller.text}/${ocr_controller.text}/${global.lat}/${global.long}'));
     //'http://10.0.2.2:8000/Sahakar Nagar/ / /1301, Swanlake/something Sahakar Nagar/18.4900796/73.8475301'));
 
     EasyLoading.dismiss();
@@ -114,10 +123,11 @@ class _homepageState extends State<homepage> {
     if (upload == 0) {
       EasyLoading.showError('upload proof');
     } else {
-      FirebaseFirestore.instance.collection("Audit").doc().set({
+      FirebaseFirestore.instance.collection("Audit").doc(global.uid).set({
         'original address': original_controller.text,
         'new address': Address,
-        'proof': url
+        'proof': url,
+        'uid': global.uid,
       }).then((value) => EasyLoading.showSuccess('audit updated'));
     }
   }
@@ -145,7 +155,7 @@ class _homepageState extends State<homepage> {
         // uploadFile(imageFile);
         final Reference firebaseStorageRef = FirebaseStorage.instance
             .ref()
-            .child(DateTime.now().millisecondsSinceEpoch.toString());
+            .child(global.uid);
 
         final UploadTask task = firebaseStorageRef.putFile(imageFile);
 
@@ -273,23 +283,32 @@ class _homepageState extends State<homepage> {
                                     ),
                                   ),
                                 ),
-                                TextField(
-                                  cursorColor: Colors.black,
-                                  controller: original_controller,
-                                  maxLines: 2,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Original Address',
-                                    labelStyle: TextStyle(color: Colors.grey),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    reverse: true,
+                                    child: TextField(
+                                      cursorColor: Colors.black,
+                                      controller: original_controller,
+                                      // minLines: 2,
+                                      maxLines: null,
+                                      // enabled: false, // FINAL CHANGE REMOVE //
+                                      decoration: const InputDecoration(
+                                        labelText: 'Original Address',
+                                        labelStyle: TextStyle(color: Colors.grey),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                                 TextField(
                                   cursorColor: Colors.black,
                                   controller: ocr_controller,
-                                  maxLines: 2,
+                                  minLines: 1,
+                                  maxLines: 4,
                                   // FINAL CHANGE REMOVE //
                                   enabled: ocr_controller.text == "" ||
                                           ocr_controller.text == " "
@@ -348,6 +367,50 @@ class _homepageState extends State<homepage> {
                                           ),
                                         ],
                                       ),
+                                // ElevatedButton(
+                                //   onPressed: () {
+                                //     setState(() {
+                                //       _futureAlbum = createAlbum();
+                                //     });
+                                //   },
+                                //   child: const Text('OTP'),
+                                // ),
+                                // FutureBuilder<Album>(
+                                //   future: _futureAlbum,
+                                //   builder: (context, snapshot) {
+                                //     if (snapshot.hasData) {
+                                //       return Text(snapshot.data!.status);
+                                //     } else if (snapshot.hasError) {
+                                //       return Text('${snapshot.error}');
+                                //     }
+
+                                //     return const CircularProgressIndicator();
+                                //   },
+                                // ),
+
+                                // ElevatedButton(
+                                //   onPressed: () {
+                                //     setState(() {
+                                //       _futureeKYC = eKYC_func();
+                                //     });
+                                //   },
+                                //   child: const Text('Get address'),
+                                // ),
+                                // FutureBuilder<eKYC>(
+                                //   future: _futureeKYC,
+                                //   builder: (context, snapshot) {
+                                //     if (snapshot.hasData) {
+                                //       print(snapshot.data!.errCode);
+                                //       print(snapshot.data!.status);
+                                //       print(snapshot.data!.eKycString);
+                                //       return Text(snapshot.data!.eKycString);
+                                //     } else if (snapshot.hasError) {
+                                //       return Text('${snapshot.error}');
+                                //     }
+
+                                //     return const CircularProgressIndicator();
+                                //   },
+                                // )
                                 // Text(Address),
                               ],
                             ),
