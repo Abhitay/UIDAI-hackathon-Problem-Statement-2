@@ -12,7 +12,7 @@ Step's:
 
 1. The operator will have to first enter their Aadhaar card number, which will generate an OTP, which will be sent to their linked mobile number. Once the user has been validated they will be redirected to the main screen.
 
-2. Once the operator has been redirected Original address would have been already filled using eKYC, they will have to enter details like Street, District & Sub-Destrict.
+2. Once the operator has been redirected Original address would have been already filled using eKYC, they will have to enter details like Street, District & Sub-District.
 
 3. In the third step operator will have to scan an offical document with the resendentail address like: Electricity bill, with the help of a Optical Character Recognition (OCR) Scanner which has been provided in the application.
 
