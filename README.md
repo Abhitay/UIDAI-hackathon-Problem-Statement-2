@@ -36,7 +36,7 @@ Step's:
 
 # Contribution
 A project by <br>
-- [Maanaav Anil Motiramani](https://github.com/Maanaav) <br>
+- [Maanaav Motiramani](https://github.com/Maanaav) <br>
 - [Abhitay Shinde](https://github.com/Abhitay)
 - [Anurag Singh](https://github.com/Anurag1902)
 - [Parth Mody](https://github.com/ParthMody)
