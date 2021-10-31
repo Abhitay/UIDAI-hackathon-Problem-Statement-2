@@ -23,6 +23,7 @@ Step's:
 6. Firebase is used as backend, audit log will be updated in firestore and official documents will be stored in firebase storage.
 
 # Video
+https://youtu.be/Zos6zW_a8yI
 
 # Screenshots
 <p align = "center">
