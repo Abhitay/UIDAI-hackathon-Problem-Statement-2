@@ -29,7 +29,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         while strTest.find('  ') > 0:
             strTest.replace('  ', ' ')
         billList = list((strTest).split(' '))
-        print(billList)
+        #print(billList)
         # print(billList)
         # print(updatedAddressList)
         i = 0
@@ -44,10 +44,10 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
                     break
         else:
             i += 1
-        print('tempAddress1', i)
-        print(tempAddress2)
+        #print('tempAddress1', i)
+        #print(tempAddress2)
         if tempAddress2:
-            print('if case')
+            #print('if case')
             # print('tempAddress2 exists')
             for elements in billList:
                 if elements in tempAddress2:
@@ -55,9 +55,9 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
                     #print(i)
                     break
         else:
-            print('else case')
+            #print('else case')
             i += 1
-        print('tempAddress2', i)
+        #print('tempAddress2', i)
         if tempAddress3:
             # print('tempAddress3 exists')
 
@@ -68,7 +68,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
                     break
         else:
             i += 1
-        print('tempAddress3', i)
+        #print('tempAddress3', i)
         if i == 3:
             return True
         return False
@@ -161,7 +161,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     def subDistrictCheck(tempAddress2):
         subDistrictNames = pd.read_csv('Sub_districts.csv')
         subDistrictNamesList = list(subDistrictNames['Sub_districts'])
-        if tempAddress3:
+        if tempAddress2:
             for elements in subDistrictNamesList:
                 if elements.lower() == tempAddress2:
                     return True
@@ -218,8 +218,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     #       OriginalAddress, '\n', OcrAddress, '\n', updatedAddress, '\n', x, '\n', y, '\n', addLat, '\n', addLong, '\n', validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
     k = l = m = 0
     finalString = 'Address Not Verified'
-    print(validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(
-        x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
+    #print(validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
     if validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3):
         OcrAddress = OcrAddress.title()
         if tempAddress1 and tempAddress2 and tempAddress3:
@@ -245,17 +244,27 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
             finalString = 'Full Address: '+OcrAddress.title(), 'District: ' + \
                 tempAddress3.title()
     if tempAddress2 and tempAddress3:
+        #print ('both')
         if finalString != 'Address Not Verified' and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
             return finalString
         else:
             return 'Address Not Verified'
     if tempAddress2 and not tempAddress3:
+        #print('tempAddress2')
+        #print(finalString)
+        #print(subDistrictCheck(tempAddress2))
         if finalString != 'Address Not Verified' and subDistrictCheck(tempAddress2):
             return finalString
         else:
             return 'Address Not Verified'
     if not tempAddress2 and tempAddress3:
+        #print('tempAddress3')
         if finalString != 'Address Not Verified' and districtCheck(tempAddress3):
+            return finalString
+        else:
+            return 'Address Not Verified'
+    if not tempAddress2 and not tempAddress3:
+        if finalString != 'Address Not Verified':
             return finalString
         else:
             return 'Address Not Verified'
