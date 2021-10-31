@@ -16,7 +16,7 @@ Step's:
 
 3. In the third step operator will have to scan an offical document with the resendentail address like: Electricity bill, with the help of a Optical Character Recognition (OCR) Scanner which has been provided in the application.
 
-4. In the next step the operator will click on the validate button which will check the differance between the Original address and the address scanned using the OCR scanner, based on the input an corresponding output will be displayed on the operator's screen.
+4. In the next step the operator will click on the validate button which commence the verification checks on the information inputted via python, the first check would verify that the district and sub district actually exist in India by search in a database of districts and subdistricts in India, following that check, another one is performed where the latitude and longitude of the device and address inputted is checked if it is in the acceptable range another check is performed to check if the OCR scanned address has the inputted details. If the three above mentioned check return true, the new address is constructed and returns it if it is similiar to the address in the aadhaar card, this check is performed using sequence matcher library.
 
 5. If the address has been validated the operator will have to click a picture of an offical document which was scanned using the OCR scanner for documentation purposes.
 
