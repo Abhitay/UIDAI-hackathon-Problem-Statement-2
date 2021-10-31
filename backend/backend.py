@@ -1,6 +1,7 @@
 from typing import final
 import requests
 import urllib.parse
+import difflib
 from difflib import SequenceMatcher
 from fastapi import FastAPI
 from geopy.geocoders import Nominatim
@@ -222,30 +223,30 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     if validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3):
         OcrAddress = OcrAddress.title()
         if tempAddress1 and tempAddress2 and tempAddress3:
-            finalString = 'Full Address: '+OcrAddress.title(), 'Street Name: ' + \
-                tempAddress1.title(), 'Sub District: ' + \
-                tempAddress2.title(), 'District: ' + tempAddress3.title()
+            finalString = OcrAddress.title(),  \
+                tempAddress1.title(),  \
+                tempAddress2.title(),  tempAddress3.title()
         if tempAddress1 and tempAddress2 and not tempAddress3:
-            finalString = 'Full Address: '+OcrAddress.title(), 'Street Name: ' + \
-                tempAddress1.title(), 'Sub District: ' + tempAddress2.title()
+            finalString = OcrAddress.title(),  \
+                tempAddress1.title(), tempAddress2.title()
         if tempAddress1 and tempAddress3 and not tempAddress2:
-            finalString = 'Full Address: '+OcrAddress.title(), 'Street Name: ' + \
-                tempAddress1.title(), 'District: ' + tempAddress3.title()
+            finalString = OcrAddress.title(),  \
+                tempAddress1.title(), tempAddress3.title()
         if tempAddress2 and tempAddress3 and not tempAddress1:
-            finalString = 'Full Address: '+OcrAddress.title(), 'Sub District: ' + \
-                tempAddress2.title(), 'District: ' + tempAddress3.title()
+            finalString = OcrAddress.title(),  \
+                tempAddress2.title(), tempAddress3.title()
         if tempAddress1 and not tempAddress2 and not tempAddress3:
-            finalString = 'Full Address: '+OcrAddress.title(), 'Street Name: ' + \
+            finalString = OcrAddress.title(),  \
                 tempAddress1.title()
         if not tempAddress1 and tempAddress2 and not tempAddress3:
-            finalString = 'Full Address: '+OcrAddress.title(), 'Sub District: ' + \
+            finalString = OcrAddress.title(),  \
                 tempAddress2.title()
         if not tempAddress1 and not tempAddress2 and not tempAddress3:
-            finalString = 'Full Address: '+OcrAddress.title(), 'District: ' + \
+            finalString = OcrAddress.title(), \
                 tempAddress3.title()
     if tempAddress2 and tempAddress3:
         #print ('both')
-        if finalString != 'Address Not Verified' and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
+        if finalString != 'Address Not Verified' and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2) and (difflib.SequenceMatcher(None, OcrAddress.title(), OriginalAddress.title())).ratio() > 0.5:
             return finalString
         else:
             return 'Address Not Verified'
@@ -253,18 +254,18 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         #print('tempAddress2')
         #print(finalString)
         #print(subDistrictCheck(tempAddress2))
-        if finalString != 'Address Not Verified' and subDistrictCheck(tempAddress2):
+        if finalString != 'Address Not Verified' and subDistrictCheck(tempAddress2) and (difflib.SequenceMatcher(None, OcrAddress.title(), OriginalAddress.title())).ratio() > 0.5:
             return finalString
         else:
             return 'Address Not Verified'
     if not tempAddress2 and tempAddress3:
         #print('tempAddress3')
-        if finalString != 'Address Not Verified' and districtCheck(tempAddress3):
+        if finalString != 'Address Not Verified' and districtCheck(tempAddress3) and (difflib.SequenceMatcher(None, OcrAddress.title(), OriginalAddress.title())).ratio() > 0.5:
             return finalString
         else:
             return 'Address Not Verified'
-    if not tempAddress2 and not tempAddress3:
-        if finalString != 'Address Not Verified':
+    if not tempAddress2 and not tempAddress3 :
+        if finalString != 'Address Not Verified' and (difflib.SequenceMatcher(None, OcrAddress.title(), OriginalAddress.title())).ratio() > 0.5:
             return finalString
         else:
             return 'Address Not Verified'
