@@ -162,13 +162,13 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         return False
 
     # -----Take all the data from flutter------
-    tempAddress1 = input("Enter the street name: ")
-    tempAddress2 = input("Enter the sub district: ")
-    tempAddress3 = input("Enter the district: ")
-    OriginalAddress = input("Enter original address: ")
-    OcrAddress = input("Enter OCR address: ")
-    x = '19.1648029'
-    y = '72.8500454'
+    # tempAddress1 = input("Enter the street name: ")
+    # tempAddress2 = input("Enter the sub district: ")
+    # tempAddress3 = input("Enter the district: ")
+    # OriginalAddress = input("Enter original address: ")
+    # OcrAddress = input("Enter OCR address: ")
+    # x = '19.1890'
+    # y = '72.8355'
     # -----------------------------------------
     tempAddress1 = tempAddress1.lower()
     tempAddress2 = tempAddress2.lower()
@@ -202,15 +202,14 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     OriginalAddressList = list((OriginalAddress.replace(',', '')).split(' '))
     # print(tempAddress1, '\n', tempAddress2, '\n', tempAddress3, '\n',
     #       OriginalAddress, '\n', OcrAddress, '\n', updatedAddress, '\n', x, '\n', y, '\n', addLat, '\n', addLong, '\n', validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
-    k = l = m = 0
+    #k = l = m = 0
     # print(validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
     if validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3):
-        OcrAddress = OcrAddress.title()
+        print('validate_bill')
+        #OcrAddress = OcrAddress.title()
         if OcrAddress and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
             return OcrAddress
-        else:
-            return 'Address Not Verified'
-            #print(OcrAddress)
+            # print('here',OcrAddress)
         #print('yes its working')
         # for elements in OriginalAddressList:
         #     #print(elements)
