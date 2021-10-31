@@ -134,10 +134,10 @@ class _landingState extends State<landing> {
                                 snapshot.data!.status == 'Y') {
                               WidgetsBinding.instance!
                                   .addPostFrameCallback((_) {
-                                Navigator.push(
+                                Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => otp(uid.text)));
+                                        builder: (context) => otp(uid.text)), (Route<dynamic> route) => false,);
                               });
                             }
                             return Text("");

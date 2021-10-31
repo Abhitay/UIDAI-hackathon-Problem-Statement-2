@@ -149,7 +149,7 @@ class _otpState extends State<otp> {
                                     final titles =
                                         document.findAllElements('UidData');
 
-                                    // print(titles.first);
+                                    print(titles.first);
 
                                     // var temp1 =
                                     //     titles.toString().replaceAll('(', "'");
@@ -170,24 +170,45 @@ class _otpState extends State<otp> {
                                     print(data['UidData']['Poi']);
                                     print(data['UidData']['Poa']);
 
-                                    String add = data['UidData']['Poa']
-                                            ['house'] +
-                                        ', ' +
-                                        data['UidData']['Poa']['lm'] +
-                                        ', ' +
-                                        data['UidData']['Poa']['loc'] +
-                                        ', ' +
-                                        data['UidData']['Poa']['street'] +
-                                        ', ' +
-                                        data['UidData']['Poa']['dist'] +
-                                        ', ' +
-                                        data['UidData']['Poa']['vtc'] +
-                                        ', ' +
-                                        data['UidData']['Poa']['pc'] +
-                                        ', ' +
-                                        data['UidData']['Poa']['state'] +
-                                        ', ' +
-                                        data['UidData']['Poa']['country'];
+                                    String add = '';
+
+                                    if (data['UidData']['Poa']['loc'] != null) {
+                                      String add = data['UidData']['Poa']
+                                              ['house'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['lm'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['loc'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['street'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['dist'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['vtc'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['pc'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['state'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['country'];
+                                    } else {
+                                      add = data['UidData']['Poa']
+                                              ['house'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['lm'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['street'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['dist'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['vtc'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['pc'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['state'] +
+                                          ', ' +
+                                          data['UidData']['Poa']['country'];
+                                    }
 
                                     print(add);
 
@@ -202,15 +223,21 @@ class _otpState extends State<otp> {
 
                                     // }
 
-                                   
-                                      Navigator.push(
+                                    if (snapshot.data!.status == 'y' ||
+                                        snapshot.data!.status == 'Y') {
+                                      WidgetsBinding.instance!
+                                          .addPostFrameCallback((_) {
+                                        Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => homepage(add),
-                                          ));
-                                   
+                                              builder: (context) =>
+                                                  homepage(add)),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      });
+                                    }
 
-                                    // return Text('');
+                                    return Text('');
                                     // return (snapshot.data!.eKycString);
                                   } else if (snapshot.hasError) {
                                     return Text('${snapshot.error}');
