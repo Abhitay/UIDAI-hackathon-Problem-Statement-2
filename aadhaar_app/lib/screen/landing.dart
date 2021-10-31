@@ -1,6 +1,6 @@
 import 'package:aadhaar_app/screen/otp.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+// import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -40,7 +40,6 @@ class _landingState extends State<landing> {
       },
       body: jsonEncode(<String, String>{
         "uid": uid.text,
-        // "vid": "999921564712",
         "txnId": "0acbaa8b-b3ae-433d-a5d2-51250ea8e970"
       }),
     );
@@ -141,7 +140,6 @@ class _landingState extends State<landing> {
                               });
                             }
                             return Text("");
-                            // return (snapshot.data!.status);
                           } else if (snapshot.hasError) {
                             return Text('${snapshot.error}');
                           }
@@ -162,7 +160,6 @@ class _landingState extends State<landing> {
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: Colors.white,
     primary: Colors.black,
-    // minimumSize: const Size(88, 36),
     padding: const EdgeInsets.symmetric(horizontal: 16),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),

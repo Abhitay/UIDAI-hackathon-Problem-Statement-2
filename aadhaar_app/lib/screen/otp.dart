@@ -6,11 +6,10 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
-import 'package:xml/xml_events.dart';
+// import 'package:xml/xml_events.dart';
 import 'package:xml2json/xml2json.dart';
 
 class otp extends StatefulWidget {
-  // otp({Key? key}) : super(key: key);
   String uid;
 
   otp(this.uid);
@@ -46,7 +45,6 @@ class _otpState extends State<otp> {
       },
       body: jsonEncode(<String, String>{
         "uid": widget.uid,
-        // "vid": "427003478234 ",
         "txnId": "0acbaa8b-b3ae-433d-a5d2-51250ea8e970",
         "otp": code
       }),
@@ -110,121 +108,81 @@ class _otpState extends State<otp> {
                                 showFieldAsBox: false,
                                 // obscureText: true,
                                 autoFocus: true,
-                                // onCodeChanged: (String code) {
-                                //   _futureeKYC = eKYC_func(code);
-                                // },
                                 onSubmit: (String verificationCode) async {
                                   print(widget.uid);
                                   print(verificationCode);
                                   _futureeKYC =
                                       eKYC_func(verificationCode.toString());
-                                }, // end onSubmit
+                                },
                               ),
-
-                              // Container(
-                              //   margin: const EdgeInsets.only(top: 15),
-                              //   child: ElevatedButton(
-                              //     style: raisedButtonStyle,
-                              //     onPressed: () {
-                              //       setState(() {
-
-                              //       });
-                              //     },
-                              //     child: const Text('Get address'),
-                              //   ),
-                              // ),
                               FutureBuilder<eKYC>(
                                 future: _futureeKYC,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    print(snapshot.data!.errCode);
-                                    print(snapshot.data!.status);
-                                    // print(snapshot.data!.eKycString.toString());
-                                    final document = XmlDocument.parse(
-                                        snapshot.data!.eKycString);
-
-                                    // print(document.toXmlString(
-                                    //     pretty: true, indent: '\t'));
-
-                                    final titles =
-                                        document.findAllElements('UidData');
-
-                                    print(titles.first);
-
-                                    // var temp1 =
-                                    //     titles.toString().replaceAll('(', "'");
-                                    // temp2 = temp1.replaceAll(')', "'");
-
-                                    // print(temp2);
-
-                                    // var xmldata =
-                                    //     '<UidData tkn="01000068ioMwSFlAcPDoq8X7O/zn8lnGNN8jpmEBft1q2HvbqOPDo5MiTX+ue9kzzv13kqgZ" uid="xxxxxxxxx882"><Poi dob="01-01-1990" gender="M" name="Kumar" phone="xxxxxxxx58"/><Poa co="C/O: Jyothi" country="India" dist="Bengaluru" house="#307, 3rdMain Road" lm="Opposite to balaji  " loc="shiva nagar\" pc="560043" state="Karnataka" street="Manjunatha nagar" vtc="Horamavu"/><LData/><Pht>base 64 of photo (C) UIDAI, 2021 Page | 4API Reference Document v1.0.0image</Pht></UidData>';
-
-                                    final Xml2Json xml2Json = Xml2Json();
-                                    xml2Json.parse(titles.first.toString());
-                                    var jsondata = xml2Json.toGData();
-                                    // print(jsondata);
-
-                                    var data = jsonDecode(jsondata);
-                                    // print(data);
-                                    print(data['UidData']['Poi']);
-                                    print(data['UidData']['Poa']);
-
-                                    String add = '';
-
-                                    if (data['UidData']['Poa']['loc'] != null) {
-                                      String add = data['UidData']['Poa']
-                                              ['house'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['lm'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['loc'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['street'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['dist'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['vtc'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['pc'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['state'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['country'];
-                                    } else {
-                                      add = data['UidData']['Poa']
-                                              ['house'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['lm'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['street'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['dist'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['vtc'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['pc'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['state'] +
-                                          ', ' +
-                                          data['UidData']['Poa']['country'];
-                                    }
-
-                                    print(add);
-
-                                    // print(tkn);
-
-                                    // print(snapshot.data!.eKycString.toXmlString(
-                                    //     pretty: true, indent: '\t'));
-                                    // print(snapshot.data!.eKycString
-                                    //     .findAllElements('lm'));
-                                    // if (snapshot.data!.status == 'y' ||
-                                    //     snapshot.data!.status == 'Y') {
-
-                                    // }
-
                                     if (snapshot.data!.status == 'y' ||
                                         snapshot.data!.status == 'Y') {
+                                      print(snapshot.data!.errCode);
+                                      print(snapshot.data!.status);
+
+                                      final document = XmlDocument.parse(
+                                          snapshot.data!.eKycString);
+
+                                      final titles =
+                                          document.findAllElements('UidData');
+
+                                      print(titles.first);
+
+                                      final Xml2Json xml2Json = Xml2Json();
+                                      xml2Json.parse(titles.first.toString());
+                                      var jsondata = xml2Json.toGData();
+
+                                      var data = jsonDecode(jsondata);
+
+                                      print(data['UidData']['Poi']);
+                                      print(data['UidData']['Poa']);
+
+                                      String add = '';
+
+                                      if (data['UidData']['Poa']['loc'] !=
+                                          null) {
+                                        String add = data['UidData']['Poa']
+                                                ['house'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['lm'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['loc'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['street'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['dist'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['vtc'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['pc'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['state'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['country'];
+                                      } else {
+                                        add = data['UidData']['Poa']['house'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['lm'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['street'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['dist'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['vtc'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['pc'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['state'] +
+                                            ', ' +
+                                            data['UidData']['Poa']['country'];
+                                      }
+
+                                      print(add);
+
                                       WidgetsBinding.instance!
                                           .addPostFrameCallback((_) {
                                         Navigator.pushAndRemoveUntil(
@@ -236,13 +194,11 @@ class _otpState extends State<otp> {
                                         );
                                       });
                                     }
-
+                                    
                                     return Text('');
-                                    // return (snapshot.data!.eKycString);
                                   } else if (snapshot.hasError) {
                                     return Text('${snapshot.error}');
                                   }
-
                                   return Text('');
                                 },
                               )
