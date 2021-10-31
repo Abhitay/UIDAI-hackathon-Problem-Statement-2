@@ -1,4 +1,5 @@
 // import 'dart:convert';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -69,6 +70,11 @@ class _homepageState extends State<homepage> {
     } catch (err) {}
   }
 
+  var full_add = '';
+  var street = '';
+  var district = '';
+  var sub_district = '';
+
   _validate() async {
     EasyLoading.show(status: 'checking...');
     if (street_controller.text == "") {
@@ -101,14 +107,40 @@ class _homepageState extends State<homepage> {
       Address = response.body;
       print(Address);
     });
-    print(Address);
 
-    if (Address == '"Address Not Verified"') {
+    if (Address != '"Address Not Verified"'){
+          var tagsJson = jsonDecode(Address);
+      List? tags = tagsJson != null ? List.from(tagsJson) : null;
+      // print(tags[0]);
+
+      setState(() {
+        if (tags!.length > 0) {
+          full_add = tags[0];
+        }
+        if (tags.length > 1) {
+          street = tags[1];
+        }
+        if (tags.length > 2) {
+          district = tags[2];
+        }
+        if (tags.length > 3) {
+          sub_district = tags[3];
+        }
+      });
+
+      // print(full_add);
+      // print(street);
+      // print(district);
+      // print(sub_district);
+    }
+
+    if (Address == '"Address Not Verified"' ||
+        Address == '"detail":"Not Found"') {
       EasyLoading.showError('cannot verify');
     } else {
       EasyLoading.showSuccess('address Verified');
       setState(() {
-        readyToUpload = 1;
+        // readyToUpload = 1; // FINAL CHANGE REMOVE //
       });
     }
   }
@@ -120,9 +152,12 @@ class _homepageState extends State<homepage> {
     } else {
       FirebaseFirestore.instance.collection("Audit").doc(global.uid).set({
         'original address': original_controller.text,
-        'new address': Address,
+        'new address': full_add,
         'proof': url,
         'uid': global.uid,
+        'District': district,
+        'Sub District': sub_district,
+        'street': street
       }).then((value) => EasyLoading.showSuccess('audit updated'));
     }
   }
