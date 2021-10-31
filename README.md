@@ -7,7 +7,7 @@ Step's:
 (**The user will have to give permissions like camera and location**)
 
 1.The operator will have to first enter their Aadhaar card number,which will generate an OTP,which will be sent to their linked mobile number.Once the user has been validated they will 
-be redirected to the main page
+be redirected to the main screen.
 
 2.Once the user has been redirected they will have to enter details like Street and District.
 
