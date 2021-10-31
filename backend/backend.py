@@ -22,7 +22,11 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
 
     def validate_bill(strTest, tempAddress1, tempAddress2, tempAddress3):
         #print(strTest, updatedAddress)
-        billList = list((strTest.replace(',', '')).split(' '))
+        strTest = strTest.replace(', ', ' ')
+        strTest = strTest.replace(',', ' ')
+        while strTest.find('  ') > 0:
+            strTest.replace('  ', ' ')
+        billList = list((strTest).split(' '))
         print(billList)
         # print(billList)
         # print(updatedAddressList)
@@ -111,7 +115,11 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         subDistrictNames = pd.read_csv('Sub_districts.csv')
         districtNamesList = list(districtNames['Districts'])
         subDistrictNamesList = list(subDistrictNames['Sub_districts'])
-        ocrAddressList = list((OcrAddress.replace(',', '')).split(' '))
+        OcrAddress = OcrAddress.replace(', ', ' ')
+        OcrAddress = OcrAddress.replace(',', ' ')
+        while OcrAddress.find('  ') >0:
+            OcrAddress.replace('  ', ' ')
+        ocrAddressList = list((OcrAddress).split(' '))
 
         i = 0
         # print('Districts')
@@ -199,56 +207,17 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     # print(district)
     # print(sub_district)
     # print(street)
+    
     OriginalAddressList = list((OriginalAddress.replace(',', '')).split(' '))
     # print(tempAddress1, '\n', tempAddress2, '\n', tempAddress3, '\n',
     #       OriginalAddress, '\n', OcrAddress, '\n', updatedAddress, '\n', x, '\n', y, '\n', addLat, '\n', addLong, '\n', validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
     #k = l = m = 0
     # print(validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
     if validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3):
-        print('validate_bill')
-        #OcrAddress = OcrAddress.title()
+        # print('validate_bill')
+        OcrAddress = OcrAddress.title()
         if OcrAddress and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
             return OcrAddress
-            # print('here',OcrAddress)
-        #print('yes its working')
-        # for elements in OriginalAddressList:
-        #     #print(elements)
-        #     if elements == tempAddress1:
-        #         k += 1
-        #     if elements == tempAddress2:
-        #         l += 1
-        #     if elements == tempAddress3:
-        #         m += 1
-        
-        # if k == 0 and l == 0 and m == 0:
-        #     newAddress = OriginalAddress + ', ' + updatedAddress
-        # elif k == 0 and l > 0 and m > 0:
-        #     newAddress = OriginalAddress + ', ' + tempAddress1
-        # elif k > 0 and l == 0 and m > 0:
-        #     newAddress = OriginalAddress + ', ' + tempAddress2
-        # elif k > 0 and l > 0 and m == 0:
-        #     newAddress = OriginalAddress + ', ' + tempAddress3
-        # elif k == 0 and l == 0 and m > 0:
-        #     newAddress = OriginalAddress + ', ' + tempAddress1 + ', ' + tempAddress2
-        # elif k == 0 and l > 0 and m == 0:
-        #     newAddress = OriginalAddress + ', ' + tempAddress1 + ', ' + tempAddress3
-        # elif k > 0 and l == 0 and m == 0:
-        #     newAddress = OriginalAddress + ', ' + tempAddress2 + ', ' + tempAddress3
-
-        # if similar(newAddress, OcrAddress):
-        #     newAddress = newAddress.replace(',', ' ')
-        #     newAddress = newAddress.title()
-        # while newAddress.find('  ') > 0:
-        #     newAddress = newAddress.replace('  ', ' ')
-        # newAddress = newAddress.title()
-    # print('here1', OcrAddress, newAddress)
-        
-    # if OcrAddress and newAddress and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
-    #     # print('here', OcrAddress, newAddress)
-    #     # print(OriginalAddress, '\n', 'Street Name: ', tempAddress1.title(),
-    #     #     '\n', 'Sub district: ', tempAddress2.title(), '\n', 'District: ', tempAddress3.title(), '\n', 'Complete Address: ', newAddress)
-    #     return newAddress
-    # else:
-    #     # print('here2', OcrAddress, newAddress)
-    #     #print('Address Not Verified')
-    #     return 'Address Not Verfied'
+        else:
+            return 'Address Not Verified'
+            
