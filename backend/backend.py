@@ -1,3 +1,4 @@
+from typing import final
 import requests
 import urllib.parse
 from difflib import SequenceMatcher
@@ -8,6 +9,7 @@ import pandas as pd
 geolocator = Nominatim(user_agent="geoapiExercises")
 
 app = FastAPI()
+
 
 @app.get('/{tempAddress1}/{tempAddress2}/{tempAddress3}/{OriginalAddress}/{OcrAddress}/{x}/{y}')
 async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, OcrAddress, x, y):
@@ -42,18 +44,20 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
                     break
         else:
             i += 1
-        #print('tempAddress1', i)
+        print('tempAddress1', i)
+        print(tempAddress2)
         if tempAddress2:
+            print('if case')
             # print('tempAddress2 exists')
-
             for elements in billList:
                 if elements in tempAddress2:
                     i += 1
                     #print(i)
                     break
         else:
+            print('else case')
             i += 1
-        #print('tempAddress2', i)
+        print('tempAddress2', i)
         if tempAddress3:
             # print('tempAddress3 exists')
 
@@ -64,11 +68,10 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
                     break
         else:
             i += 1
-        #print('tempAddress3', i)
+        print('tempAddress3', i)
         if i == 3:
             return True
         return False
-
 
     def getLat(tempAddress1):
         url = 'https://nominatim.openstreetmap.org/search/' + \
@@ -80,7 +83,6 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         else:
             return 0
 
-
     def getLong(tempAddress1):
         url = 'https://nominatim.openstreetmap.org/search/' + \
             urllib.parse.quote(tempAddress1) + '?format=json'
@@ -90,7 +92,6 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
             return response[0]["lon"]
         else:
             return 0
-
 
     def validate_location(devlat, devlong, addlat, addlong):
         # print(devlat)
@@ -102,13 +103,11 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
             return True
         return False
 
-
     def similar(a, b):
         ratio = SequenceMatcher(None, a, b).ratio()
         # print(ratio)
         if ratio > 0.6:
             return True
-
 
     def OcrAddressCheck(OcrAddress, district, sub_district):
         districtNames = pd.read_csv('Districts.csv')
@@ -117,7 +116,7 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         subDistrictNamesList = list(subDistrictNames['Sub_districts'])
         OcrAddress = OcrAddress.replace(', ', ' ')
         OcrAddress = OcrAddress.replace(',', ' ')
-        while OcrAddress.find('  ') >0:
+        while OcrAddress.find('  ') > 0:
             OcrAddress.replace('  ', ' ')
         ocrAddressList = list((OcrAddress).split(' '))
 
@@ -155,10 +154,9 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         districtNamesList = list(districtNames['Districts'])
         if tempAddress3:
             for elements in districtNamesList:
-                if elements.lower()== tempAddress3:
+                if elements.lower() == tempAddress3:
                     return True
         return False
-
 
     def subDistrictCheck(tempAddress2):
         subDistrictNames = pd.read_csv('Sub_districts.csv')
@@ -183,7 +181,16 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     tempAddress3 = tempAddress3.lower()
     OriginalAddress = OriginalAddress.lower()
     OcrAddress = OcrAddress.lower()
-
+    if tempAddress1 == '{tempaddress1}':
+        tempAddress1 = ''
+    if tempAddress2 == '{tempaddress2}':
+        tempAddress2 = ''
+    if tempAddress3 == '{tempaddress3}':
+        tempAddress3 = ''
+    if OriginalAddress == '{originaladdress}':
+        OriginalAddress = ''
+    if OcrAddress == '{ocraddress}':
+        OcrAddress = ''
     updatedAddress = tempAddress1 + ',' + tempAddress2 + ',' + tempAddress3
     if tempAddress1:
         addLat = str(getLat(tempAddress1))
@@ -196,8 +203,6 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
         addLong = str(getLong(tempAddress3))
     # print(addLat)
     # print(addLong)
-
-    newAddress = ''
     # print(newAddress)
     # location = geolocator.reverse(x+","+y)
     # address = location.raw['address']
@@ -207,17 +212,50 @@ async def getData(tempAddress1, tempAddress2, tempAddress3, OriginalAddress, Ocr
     # print(district)
     # print(sub_district)
     # print(street)
-    
+
     OriginalAddressList = list((OriginalAddress.replace(',', '')).split(' '))
     # print(tempAddress1, '\n', tempAddress2, '\n', tempAddress3, '\n',
     #       OriginalAddress, '\n', OcrAddress, '\n', updatedAddress, '\n', x, '\n', y, '\n', addLat, '\n', addLong, '\n', validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
-    #k = l = m = 0
-    # print(validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
+    k = l = m = 0
+    finalString = 'Address Not Verified'
+    print(validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3), '\n', validate_location(
+        x, y, addLat, addLong), '\n', OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3))
     if validate_bill(OcrAddress, tempAddress1, tempAddress2, tempAddress3) and validate_location(x, y, addLat, addLong) and OcrAddressCheck(OcrAddress, tempAddress2, tempAddress3):
-        # print('validate_bill')
         OcrAddress = OcrAddress.title()
-        if OcrAddress and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
-            return OcrAddress
+        if tempAddress1 and tempAddress2 and tempAddress3:
+            finalString = 'Full Address: '+OcrAddress.title(), 'Street Name: ' + \
+                tempAddress1.title(), 'Sub District: ' + \
+                tempAddress2.title(), 'District: ' + tempAddress3.title()
+        if tempAddress1 and tempAddress2 and not tempAddress3:
+            finalString = 'Full Address: '+OcrAddress.title(), 'Street Name: ' + \
+                tempAddress1.title(), 'Sub District: ' + tempAddress2.title()
+        if tempAddress1 and tempAddress3 and not tempAddress2:
+            finalString = 'Full Address: '+OcrAddress.title(), 'Street Name: ' + \
+                tempAddress1.title(), 'District: ' + tempAddress3.title()
+        if tempAddress2 and tempAddress3 and not tempAddress1:
+            finalString = 'Full Address: '+OcrAddress.title(), 'Sub District: ' + \
+                tempAddress2.title(), 'District: ' + tempAddress3.title()
+        if tempAddress1 and not tempAddress2 and not tempAddress3:
+            finalString = 'Full Address: '+OcrAddress.title(), 'Street Name: ' + \
+                tempAddress1.title()
+        if not tempAddress1 and tempAddress2 and not tempAddress3:
+            finalString = 'Full Address: '+OcrAddress.title(), 'Sub District: ' + \
+                tempAddress2.title()
+        if not tempAddress1 and not tempAddress2 and not tempAddress3:
+            finalString = 'Full Address: '+OcrAddress.title(), 'District: ' + \
+                tempAddress3.title()
+    if tempAddress2 and tempAddress3:
+        if finalString != 'Address Not Verified' and districtCheck(tempAddress3) and subDistrictCheck(tempAddress2):
+            return finalString
         else:
             return 'Address Not Verified'
-            
+    if tempAddress2 and not tempAddress3:
+        if finalString != 'Address Not Verified' and subDistrictCheck(tempAddress2):
+            return finalString
+        else:
+            return 'Address Not Verified'
+    if not tempAddress2 and tempAddress3:
+        if finalString != 'Address Not Verified' and districtCheck(tempAddress3):
+            return finalString
+        else:
+            return 'Address Not Verified'
