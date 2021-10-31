@@ -145,7 +145,7 @@ class _otpState extends State<otp> {
 
                                       if (data['UidData']['Poa']['loc'] !=
                                           null) {
-                                        String add = data['UidData']['Poa']
+                                        add = data['UidData']['Poa']
                                                 ['house'] +
                                             ', ' +
                                             data['UidData']['Poa']['lm'] +

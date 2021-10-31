@@ -99,6 +99,7 @@ class _homepageState extends State<homepage> {
 
     setState(() {
       Address = response.body;
+      print(Address);
     });
     print(Address);
 
@@ -136,9 +137,8 @@ class _homepageState extends State<homepage> {
       if (image != null) {
         EasyLoading.show(status: 'checking...');
         imageFile = File(image.path);
-        final Reference firebaseStorageRef = FirebaseStorage.instance
-            .ref()
-            .child(global.uid);
+        final Reference firebaseStorageRef =
+            FirebaseStorage.instance.ref().child(global.uid);
 
         final UploadTask task = firebaseStorageRef.putFile(imageFile);
 
@@ -275,7 +275,8 @@ class _homepageState extends State<homepage> {
                                       // enabled: false, // FINAL CHANGE REMOVE //
                                       decoration: const InputDecoration(
                                         labelText: 'Original Address',
-                                        labelStyle: TextStyle(color: Colors.grey),
+                                        labelStyle:
+                                            TextStyle(color: Colors.grey),
                                         focusedBorder: UnderlineInputBorder(
                                           borderSide:
                                               BorderSide(color: Colors.black),
@@ -290,10 +291,10 @@ class _homepageState extends State<homepage> {
                                   minLines: 1,
                                   maxLines: 4,
                                   // FINAL CHANGE REMOVE //
-                                  enabled: ocr_controller.text == "" ||
-                                          ocr_controller.text == " "
-                                      ? false
-                                      : true,
+                                  // enabled: ocr_controller.text == "" ||
+                                  //         ocr_controller.text == " "
+                                  //     ? false
+                                  //     : true,
                                   decoration: const InputDecoration(
                                     labelText: 'Ocr Address',
                                     labelStyle: TextStyle(color: Colors.grey),
