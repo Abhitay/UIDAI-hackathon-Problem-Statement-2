@@ -2,7 +2,7 @@
 
 We are a team of 5, B.Tech 2nd year students, we developed did project for [AADHAAR HACKATHON 2021](https://hackathon.uidai.gov.in/).
 ### Team reference: OHF3QUSj1f
-### Theme 1: Address Update <br> [Problem Statement 2](https://hackathon.uidai.gov.in/problem-statement): Address Update Using Supporting Document. 
+### Theme 1: Address Update <br> [Problem Statement 2](https://hackathon.uidai.gov.in/problem-statement): Address Update Using Supporting Document
 
 # Description:
 We have made the application using Flutter as a mobile User-Interface framework. External(Fast Api, GeoCode) as well as Internal(Aadhaar Auth API & Aadhaar eKYC API) api's have been used in the backend, they have been connected by using python as a programming language. Finally the backend was deployed using Deta.
@@ -12,7 +12,7 @@ Step's:
 
 1. The operator will have to first enter their Aadhaar card number, which will generate an OTP, which will be sent to their linked mobile number. Once the user has been validated they will be redirected to the main screen.
 
-2. Once the operator has been redirected Original address would have been already filled using eKYC, they will have to enter details like Street, District & Sub-Destrict.
+2. Once the operator has been redirected Original address would have been already filled using eKYC, they will have to enter details like Street, District & Sub-District.
 
 3. In the third step operator will have to scan an offical document with the resendentail address like: Electricity bill, with the help of a Optical Character Recognition (OCR) Scanner which has been provided in the application.
 
