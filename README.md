@@ -22,4 +22,10 @@ be redirected to the main screen.
 
 # Screenshots
 <p align = "center">
+  <img src="https://github.com/Abhitay/UIDAI-hackathon-Problem-Statement-2/blob/main/assets/phone/screen1.png" width="400" />
+  <img src="https://github.com/Abhitay/UIDAI-hackathon-Problem-Statement-2/blob/main/assets/phone/screen2.png" width="400" />
+  <img src="https://github.com/Abhitay/UIDAI-hackathon-Problem-Statement-2/blob/main/assets/phone/screen3.png" width="400" />
+  <img src="https://github.com/Abhitay/UIDAI-hackathon-Problem-Statement-2/blob/main/assets/phone/screen4.png" width="400" />
+  <img src="https://github.com/Abhitay/UIDAI-hackathon-Problem-Statement-2/blob/main/assets/phone/screen6.png" width="400" />
+  <img src="https://github.com/Abhitay/UIDAI-hackathon-Problem-Statement-2/blob/main/assets/phone/screen5.png" width="400" />
 </p>
