@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,8 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import '../global/globals.dart' as global;
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import '../api_call.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+// import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class homepage extends StatefulWidget {
@@ -36,13 +35,9 @@ class _homepageState extends State<homepage> {
 
   final int _ocrCamera = FlutterMobileVision.CAMERA_BACK;
   String _text = "TEXT";
-  // Future<Album>? _futureAlbum;
-  // Future<eKYC>? _futureeKYC;
   @override
   void initState() {
     get_location();
-    // print(createAlbum());
-    // createAlbum();
     setState(() {
       original_controller.text = widget.add;
     });
@@ -99,7 +94,6 @@ class _homepageState extends State<homepage> {
     }
     var response = await http.get(Uri.parse(
         'https://doh8xt.deta.dev/${street_controller.text}/${subDistrict_controller.text}/${district_controller.text}/${original_controller.text}/${ocr_controller.text}/${global.lat}/${global.long}'));
-    //'http://10.0.2.2:8000/Sahakar Nagar/ / /1301, Swanlake/something Sahakar Nagar/18.4900796/73.8475301'));
 
     EasyLoading.dismiss();
 
@@ -134,25 +128,14 @@ class _homepageState extends State<homepage> {
 
   late File imageFile;
 
-  // Future<void> uploadFile(String filePath) async {
-  //   File file = File(filePath);
-  //   await firebase_storage.FirebaseStorage.instance
-  //       .ref('uploads/file-to-upload.png')
-  //       .putFile(file);
-  // }
-
   _imgFromCamera() async {
     PickedFile? image =
         await ImagePicker().getImage(source: ImageSource.camera);
-    // File image = (await ImagePicker()
-    //     .pickImage(source: ImageSource.camera, imageQuality: 50)) as File;
 
     setState(() async {
       if (image != null) {
         EasyLoading.show(status: 'checking...');
-        // imageFile = File(image.path);
         imageFile = File(image.path);
-        // uploadFile(imageFile);
         final Reference firebaseStorageRef = FirebaseStorage.instance
             .ref()
             .child(global.uid);
@@ -169,7 +152,6 @@ class _homepageState extends State<homepage> {
         print('No image selected.');
         return;
       }
-      // imageFile = image;
     });
   }
 
@@ -179,7 +161,6 @@ class _homepageState extends State<homepage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _imgFromCamera();
-          // Navigator.of(context).pop();
         },
         child: const Icon(Icons.camera_alt),
         backgroundColor: Colors.black87,
@@ -290,7 +271,6 @@ class _homepageState extends State<homepage> {
                                     child: TextField(
                                       cursorColor: Colors.black,
                                       controller: original_controller,
-                                      // minLines: 2,
                                       maxLines: null,
                                       // enabled: false, // FINAL CHANGE REMOVE //
                                       decoration: const InputDecoration(
@@ -367,51 +347,6 @@ class _homepageState extends State<homepage> {
                                           ),
                                         ],
                                       ),
-                                // ElevatedButton(
-                                //   onPressed: () {
-                                //     setState(() {
-                                //       _futureAlbum = createAlbum();
-                                //     });
-                                //   },
-                                //   child: const Text('OTP'),
-                                // ),
-                                // FutureBuilder<Album>(
-                                //   future: _futureAlbum,
-                                //   builder: (context, snapshot) {
-                                //     if (snapshot.hasData) {
-                                //       return Text(snapshot.data!.status);
-                                //     } else if (snapshot.hasError) {
-                                //       return Text('${snapshot.error}');
-                                //     }
-
-                                //     return const CircularProgressIndicator();
-                                //   },
-                                // ),
-
-                                // ElevatedButton(
-                                //   onPressed: () {
-                                //     setState(() {
-                                //       _futureeKYC = eKYC_func();
-                                //     });
-                                //   },
-                                //   child: const Text('Get address'),
-                                // ),
-                                // FutureBuilder<eKYC>(
-                                //   future: _futureeKYC,
-                                //   builder: (context, snapshot) {
-                                //     if (snapshot.hasData) {
-                                //       print(snapshot.data!.errCode);
-                                //       print(snapshot.data!.status);
-                                //       print(snapshot.data!.eKycString);
-                                //       return Text(snapshot.data!.eKycString);
-                                //     } else if (snapshot.hasError) {
-                                //       return Text('${snapshot.error}');
-                                //     }
-
-                                //     return const CircularProgressIndicator();
-                                //   },
-                                // )
-                                // Text(Address),
                               ],
                             ),
                           ),
@@ -422,8 +357,6 @@ class _homepageState extends State<homepage> {
                 ),
               ),
             ),
-            //   ],
-            // )
           ],
         ),
       ),
@@ -444,9 +377,8 @@ class _homepageState extends State<homepage> {
 
       setState(() {
         if (ocr_controller.text == "") {
-          print("object");
+          print("");
         }
-        // original_controller.text = texts[0].value;
         ocr_controller.text = texts[0].value;
         _text = texts[0].value;
       });
@@ -458,7 +390,6 @@ class _homepageState extends State<homepage> {
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: Colors.white,
     primary: Colors.black,
-    // minimumSize: const Size(88, 36),
     padding: const EdgeInsets.symmetric(horizontal: 16),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
